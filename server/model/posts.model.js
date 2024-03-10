@@ -18,4 +18,22 @@ async function addPostModel(titulo, img, descripcion) {
   }
 }
 
-module.exports = { getModel, addPostModel };
+async function updatePostLikesModel(id) {
+  try {
+    const updatedPost = await pool.query('UPDATE posts SET likes = likes + 1 WHERE id = $1 RETURNING *', [id]);
+    return updatedPost.rows[0]; // Devuelve la publicación actualizada
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+
+async function deletePostModel(id) {
+  try {
+    const deletedPost = await pool.query('DELETE FROM POSTS WHERE id = $1 RETURNING *', [id]);
+    return deletedPost.rows;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+
+module.exports = { getModel, addPostModel, updatePostLikesModel, deletePostModel };
